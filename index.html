@@ -214,6 +214,11 @@
   .notify-btn{appearance:none;border:1px solid var(--stroke);background:rgba(255,255,255,.05);color:var(--muted);
     border-radius:11px;padding:8px 12px;font:600 12px inherit;cursor:pointer;transition:.2s}
   .notify-btn.on{color:var(--good);border-color:rgba(90,214,160,.45);background:rgba(90,214,160,.10)}
+  .tg-alert-types{display:none;gap:7px;flex-wrap:wrap;margin-top:11px}
+  body.telegram-mini-app .tg-alert-types{display:flex}
+  .tg-alert-types button{appearance:none;border:1px solid var(--stroke-soft);border-radius:10px;padding:8px 10px;
+    color:var(--muted);background:rgba(255,255,255,.04);font:650 11px inherit;cursor:pointer}
+  .tg-alert-types button.on{color:var(--good);border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.09)}
   .detail-box,.goal-box{margin-top:16px;border:1px solid var(--stroke-soft);background:rgba(2,6,23,.24);border-radius:16px;padding:18px}
   .detail-title{font-size:12px;font-weight:800;margin-bottom:10px;letter-spacing:.2px}
   .detail-scroll{overflow-x:auto}
@@ -260,6 +265,48 @@
   .toast-container{position:fixed;right:20px;bottom:20px;z-index:20;display:flex;flex-direction:column;gap:10px;max-width:340px}
   .toast{padding:13px 15px;border-radius:14px;background:rgba(18,22,36,.94);border:1px solid var(--stroke);box-shadow:var(--shadow);font-size:12px;line-height:1.45}
   .toast b{display:block;color:var(--txt);margin-bottom:2px}.toast span{color:var(--muted)}
+  .tg-nav{display:none}
+
+  body.telegram-mini-app{
+    --bg:var(--tg-theme-bg-color,#070b14);
+    --surface:var(--tg-theme-secondary-bg-color,#0d1422);
+    --txt:var(--tg-theme-text-color,#f8fafc);
+    --muted:var(--tg-theme-hint-color,#94a3b8);
+    --accent:var(--tg-theme-link-color,#5eead4);
+    --accent2:var(--tg-theme-button-color,#818cf8);
+    background:var(--bg);
+  }
+  body.telegram-mini-app .bg{
+    background:
+      radial-gradient(circle at 15% 0%,color-mix(in srgb,var(--accent2) 18%,transparent),transparent 34%),
+      radial-gradient(circle at 90% 28%,color-mix(in srgb,var(--accent) 13%,transparent),transparent 32%),
+      var(--bg);
+  }
+  body.telegram-mini-app .blob{animation:none;opacity:.1}
+  body.telegram-mini-app .wrap{
+    max-width:760px;
+    padding-top:max(12px,var(--tg-safe-area-inset-top,0px));
+    padding-bottom:calc(96px + max(0px,var(--tg-safe-area-inset-bottom,0px)));
+  }
+  body.telegram-mini-app header.top{
+    top:max(8px,var(--tg-safe-area-inset-top,0px));
+    background:color-mix(in srgb,var(--bg) 82%,transparent);
+  }
+  body.telegram-mini-app .tg-nav{
+    position:fixed;z-index:30;left:12px;right:12px;
+    bottom:calc(10px + max(0px,var(--tg-safe-area-inset-bottom,0px)));
+    display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:6px;
+    border:1px solid var(--stroke);border-radius:18px;
+    background:color-mix(in srgb,var(--surface) 91%,transparent);
+    box-shadow:0 18px 42px rgba(0,0,0,.35);
+    backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  }
+  .tg-nav button{
+    appearance:none;border:0;border-radius:13px;background:transparent;color:var(--muted);
+    min-width:0;padding:9px 4px 8px;font:650 10px/1.15 inherit;cursor:pointer;
+  }
+  .tg-nav button span{display:block;font-size:19px;line-height:1;margin-bottom:5px}
+  .tg-nav button.active{color:var(--txt);background:rgba(148,163,184,.12)}
 
   /* SpaceX lider tablosu */
   .lb{display:flex;flex-direction:column;gap:8px}
@@ -318,6 +365,16 @@
     .hero-stats{gap:18px}.hero-stats .s{flex-basis:94px;min-width:94px}.hero-stats .s .v{font-size:21px;min-height:26px}
     .hero-stats .campaign-clock{flex-basis:100%;width:100%;min-width:0}
     .refresh-status{display:none}
+    body.telegram-mini-app .wrap{padding-left:10px;padding-right:10px}
+    body.telegram-mini-app header.top{padding:10px 12px;border-radius:16px;margin-bottom:12px}
+    body.telegram-mini-app .brand .mark{width:40px;height:40px;border-radius:12px}
+    body.telegram-mini-app .controls{width:auto;margin-left:auto}
+    body.telegram-mini-app #epochSeg{order:3;width:100%}
+    body.telegram-mini-app .campaign-bar{gap:8px;margin-bottom:12px}
+    body.telegram-mini-app .hero{padding:22px 18px;margin-bottom:12px;border-radius:18px}
+    body.telegram-mini-app .panel,
+    body.telegram-mini-app .walletbox{padding:19px 16px;border-radius:18px}
+    body.telegram-mini-app .grid{gap:12px}
   }
   @media(prefers-reduced-motion:reduce){
     *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
@@ -329,7 +386,7 @@
   <div class="grain"></div>
 
   <div class="wrap">
-    <header class="top">
+    <header class="top" id="overview">
       <div class="brand">
         <div class="mark"><img src="./assets/titan-logo.png?v=2" alt="Titan Stats" /></div>
         <div>
@@ -357,7 +414,7 @@
       </div>
     </header>
 
-    <div class="campaign-bar">
+    <div class="campaign-bar" id="campaignsSection">
       <div class="campaign-switch" id="campaignSeg">
         <button data-campaign="prestocks" class="active">PreStocks</button>
       </div>
@@ -390,7 +447,7 @@
 
     <div class="grid" id="grid"></div>
 
-    <section class="glass walletbox">
+    <section class="glass walletbox" id="usersSection">
       <h2 id="walletTitle">Track Your Rank</h2>
       <div class="hint" id="walletHint">
         Enter your <b>Titan username</b> to see rank, projected reward and net result. A wallet address also works.
@@ -406,6 +463,7 @@
         <div class="watchlist" id="watchlist"></div>
         <button class="notify-btn" id="notifyBtn" type="button">🔕 Enable alerts</button>
       </div>
+      <div class="tg-alert-types" id="telegramAlertTypes"></div>
       <div id="trackedSummary" class="detail-box" style="display:none"></div>
       <div id="rewardSummary" class="reward-summary" style="display:none"></div>
       <div id="rewardDetail" class="detail-box" style="display:none"></div>
@@ -429,9 +487,30 @@
       <div class="note" id="footNote">Data source: titan.exchange/api/wallet-stats/prestock-leaderboard</div>
     </footer>
   </div>
+  <nav class="tg-nav" id="telegramNav" aria-label="Telegram Mini App">
+    <button type="button" data-tg-section="overview" class="active"><span>⌂</span><b data-tg-label="overview">Overview</b></button>
+    <button type="button" data-tg-section="campaigns"><span>🚀</span><b data-tg-label="campaigns">Campaigns</b></button>
+    <button type="button" data-tg-section="calculator"><span>🎯</span><b data-tg-label="calculator">Calculator</b></button>
+    <button type="button" data-tg-section="users"><span>👥</span><b data-tg-label="users">Users</b></button>
+  </nav>
   <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
+const telegramWebApp = window.Telegram?.WebApp || null;
+const telegramParams = new URLSearchParams(location.search);
+const telegramMiniApp = Boolean(telegramWebApp?.initData) || telegramParams.get('telegram') === '1';
+const telegramAuthorized = Boolean(telegramWebApp?.initData);
+if(telegramMiniApp){
+  document.body.classList.add('telegram-mini-app');
+  try{
+    telegramWebApp?.ready();
+    telegramWebApp?.expand();
+    telegramWebApp?.setHeaderColor?.('bg_color');
+    telegramWebApp?.setBackgroundColor?.('bg_color');
+  }catch(e){}
+}
+
 const I18N = {
   en: {
     appTitle:'Titan Stats', language:'Language',
@@ -522,7 +601,8 @@ const I18N = {
     campaignFoot:'${symbol} kampanyası · kaynak:', topTraders:'ilk 100 işlemci'
   }
 };
-let currentLang = localStorage.getItem('titanLanguage');
+let currentLang = localStorage.getItem('titanLanguage') ||
+  (telegramWebApp?.initDataUnsafe?.user?.language_code || '');
 if(!['en','tr'].includes(currentLang)) currentLang = 'en';
 function t(key, vars={}){
   const template = I18N[currentLang][key] || I18N.en[key] || key;
@@ -597,6 +677,48 @@ let swapAmountValue = Number(localStorage.getItem('titanSwapAmount')) || 1000;
 let notificationPrefs = readStoredJSON('titanNotifications', {enabled:false, events:{}});
 if(!notificationPrefs || typeof notificationPrefs !== 'object') notificationPrefs = {enabled:false, events:{}};
 notificationPrefs.events = notificationPrefs.events || {};
+let telegramSettings = null;
+
+async function telegramSettingsRequest(method='GET', patch){
+  if(!telegramAuthorized) return null;
+  const response = await fetch('/api/telegram-settings', {
+    method,
+    headers:{
+      'Authorization':'tma '+telegramWebApp.initData,
+      ...(patch ? {'Content-Type':'application/json'} : {}),
+    },
+    ...(patch ? {body:JSON.stringify(patch)} : {}),
+  });
+  if(!response.ok) throw new Error('Telegram settings unavailable');
+  return (await response.json()).settings;
+}
+
+async function loadTelegramSettings(){
+  if(!telegramAuthorized) return;
+  try{
+    telegramSettings = await telegramSettingsRequest();
+    if(!telegramSettings) return;
+    currentLang = telegramSettings.language || currentLang;
+    trackedUsers = Array.isArray(telegramSettings.follows)
+      ? telegramSettings.follows.map(value=>String(value).trim()).filter(Boolean).slice(0,8)
+      : trackedUsers;
+    userQuery = trackedUsers[0] || userQuery;
+    notificationPrefs.enabled = telegramSettings.alerts !== false;
+    localStorage.setItem('titanLanguage',currentLang);
+    if(userQuery) localStorage.setItem('titanWallet',userQuery);
+    localStorage.setItem('titanTrackedUsers',JSON.stringify(trackedUsers));
+    saveNotificationPrefs();
+  }catch(e){
+    // The dashboard stays fully usable if Telegram authorization has expired.
+  }
+}
+
+function syncTelegramSettings(patch){
+  if(!telegramAuthorized) return Promise.resolve(null);
+  return telegramSettingsRequest('PATCH',patch)
+    .then(settings=>{ telegramSettings = settings; return settings; })
+    .catch(()=>null);
+}
 
 function applyStaticLanguage(){
   document.documentElement.lang = currentLang;
@@ -621,6 +743,13 @@ function applyStaticLanguage(){
   document.getElementById('goalTitle').textContent = t('goalTitle');
   document.getElementById('targetRewardLabel').textContent = t('targetRewardLabel');
   document.getElementById('swapAmountLabel').textContent = t('swapAmountLabel');
+  const telegramLabels = currentLang === 'tr'
+    ? {overview:'Özet',campaigns:'Kampanyalar',calculator:'Hesaplayıcı',users:'Kullanıcılar'}
+    : {overview:'Overview',campaigns:'Campaigns',calculator:'Calculator',users:'Users'};
+  document.querySelectorAll('[data-tg-label]').forEach(label=>{
+    label.textContent = telegramLabels[label.dataset.tgLabel] || label.textContent;
+  });
+  renderTelegramAlertTypes();
 }
 
 // --- Odul ayarlari ---
@@ -1050,9 +1179,23 @@ function saveNotificationPrefs(){
 function updateNotifyButton(){
   const button = document.getElementById('notifyBtn');
   if(!button) return;
-  const enabled = notificationPrefs.enabled && 'Notification' in window && Notification.permission === 'granted';
+  const enabled = telegramMiniApp
+    ? notificationPrefs.enabled
+    : notificationPrefs.enabled && 'Notification' in window && Notification.permission === 'granted';
   button.classList.toggle('on', enabled);
   button.textContent = enabled ? t('alertsOn') : t('enableAlerts');
+}
+function renderTelegramAlertTypes(){
+  const container = document.getElementById('telegramAlertTypes');
+  if(!container || !telegramMiniApp) return;
+  const values = telegramSettings?.alertTypes || {campaigns:true,epochs:true,ranks:true};
+  const labels = currentLang === 'tr'
+    ? {campaigns:'Kampanya',epochs:'Epoch',ranks:'Sıralama'}
+    : {campaigns:'Campaigns',epochs:'Epochs',ranks:'Rank'};
+  container.innerHTML = Object.entries(labels).map(([key,label])=>
+    `<button type="button" class="${values[key]!==false?'on':''}" data-alert-type="${key}">` +
+      `${values[key]!==false?'✓ ':'○ '}${label}</button>`
+  ).join('');
 }
 function notifyUser(title, body, tag){
   showToast(title, body);
@@ -1108,6 +1251,18 @@ function checkCampaignNotifications(){
   if(changed) saveNotificationPrefs();
 }
 async function toggleNotifications(){
+  if(telegramMiniApp){
+    notificationPrefs.enabled = !notificationPrefs.enabled;
+    saveNotificationPrefs();
+    updateNotifyButton();
+    await syncTelegramSettings({alerts:notificationPrefs.enabled});
+    showToast(
+      notificationPrefs.enabled ? t('notificationsOnTitle') : t('notificationsOffTitle'),
+      notificationPrefs.enabled ? t('notificationsOnBody') : t('notificationsOffBody')
+    );
+    try{ telegramWebApp?.HapticFeedback?.notificationOccurred?.('success'); }catch(e){}
+    return;
+  }
   if(notificationPrefs.enabled){
     notificationPrefs.enabled = false;
     saveNotificationPrefs(); updateNotifyButton();
@@ -1129,7 +1284,48 @@ async function toggleNotifications(){
   showToast(t('notificationsOnTitle'), t('notificationsOnBody'));
 }
 
-function init(){
+function openTelegramSection(requested=telegramParams.get('section') || 'overview'){
+  if(!telegramMiniApp) return;
+  let section = String(requested || 'overview');
+  if(section.startsWith('calculator')){
+    const requestedCampaign = section.startsWith('calculator-') ? section.slice('calculator-'.length) : '';
+    const activeSlug = visibleCampaignSlugs().find(slug=>
+      ['active','urgent'].includes(campaignStatus(campaignConfig(slug)).key)
+    ) || visibleCampaignSlugs()[0];
+    const slug = DATA[requestedCampaign]?.all ? requestedCampaign : activeSlug;
+    if(slug){
+      currentCampaign = slug;
+      currentEpoch = activeEpochKey(campaignConfig(slug));
+      buildCampaignTabs();
+      buildEpochTabs();
+      load(currentEpoch);
+    }
+    section = 'calculator';
+  }
+  const target = section === 'campaigns'
+    ? document.getElementById('campaignsSection')
+    : section === 'users'
+      ? document.getElementById('usersSection')
+      : section === 'calculator'
+        ? document.getElementById('goalCalculator')
+        : document.getElementById('overview');
+  document.querySelectorAll('#telegramNav button').forEach(button=>{
+    button.classList.toggle('active',button.dataset.tgSection === section);
+  });
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    target?.scrollIntoView({behavior:'smooth',block:section==='calculator'?'center':'start'});
+  }));
+}
+
+document.getElementById('telegramNav').addEventListener('click', event=>{
+  const button = event.target.closest('[data-tg-section]');
+  if(!button) return;
+  try{ telegramWebApp?.HapticFeedback?.selectionChanged?.(); }catch(e){}
+  openTelegramSection(button.dataset.tgSection);
+});
+
+async function init(){
+  await loadTelegramSettings();
   // Sayfayi ag yanitini bekletmeden gomulu veriyle hemen ciz.
   applyStaticLanguage();
   buildCampaignTabs();
@@ -1151,6 +1347,7 @@ function init(){
   document.addEventListener('visibilitychange', ()=>{
     if(document.visibilityState === 'visible' && Date.now() >= nextAutoRefreshAt) refreshData();
   });
+  openTelegramSection();
 }
 
 function render(d){
@@ -1587,6 +1784,7 @@ function applyWallet(){
   trackedUsers = [nextUser, ...trackedUsers.filter(value=>value.toLowerCase()!==nextUser.toLowerCase())].slice(0,8);
   localStorage.setItem('titanWallet', userQuery);
   persistTrackedUsers();
+  syncTelegramSettings({follows:trackedUsers});
   load(currentEpoch);
 }
 document.getElementById('walletBtn').addEventListener('click', applyWallet);
@@ -1603,7 +1801,9 @@ document.getElementById('watchlist').addEventListener('click', e=>{
     if(userQuery.toLowerCase()===name.toLowerCase()) userQuery = trackedUsers[0] || '';
     walletInput.value = userQuery;
     if(userQuery) localStorage.setItem('titanWallet',userQuery); else localStorage.removeItem('titanWallet');
-    persistTrackedUsers(); load(currentEpoch); return;
+    persistTrackedUsers();
+    syncTelegramSettings({follows:trackedUsers});
+    load(currentEpoch); return;
   }
   if(userButton){
     userQuery = userButton.dataset.watchUser;
@@ -1623,11 +1823,24 @@ swapAmountInput.addEventListener('input', ()=>{
   if(currentCampaign!=='prestocks') renderGoalCalculator(DATA[currentCampaign]?.[currentEpoch]||DATA[currentCampaign]?.all,campaignConfig(currentCampaign));
 });
 document.getElementById('notifyBtn').addEventListener('click', toggleNotifications);
+document.getElementById('telegramAlertTypes').addEventListener('click', async event=>{
+  const button = event.target.closest('[data-alert-type]');
+  if(!button) return;
+  const key = button.dataset.alertType;
+  const current = telegramSettings?.alertTypes || {campaigns:true,epochs:true,ranks:true};
+  telegramSettings = Object.assign({},telegramSettings,{
+    alertTypes:Object.assign({},current,{[key]:current[key]===false}),
+  });
+  renderTelegramAlertTypes();
+  await syncTelegramSettings({alertTypes:telegramSettings.alertTypes});
+  try{ telegramWebApp?.HapticFeedback?.selectionChanged?.(); }catch(e){}
+});
 document.getElementById('langSwitch').addEventListener('click', e=>{
   const button = e.target.closest('[data-lang]');
   if(!button || button.dataset.lang === currentLang) return;
   currentLang = button.dataset.lang;
   localStorage.setItem('titanLanguage',currentLang);
+  syncTelegramSettings({language:currentLang});
   applyStaticLanguage();
   updateNotifyButton();
   buildCampaignTabs();
