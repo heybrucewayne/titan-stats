@@ -211,14 +211,6 @@
   .watch-chip button.remove{padding-left:7px;padding-right:8px;color:#ff8c8c;border-left:1px solid var(--stroke-soft)}
   .watch-chip.active{border-color:rgba(110,168,255,.55);background:rgba(110,168,255,.14)}
   .watch-chip.active button.user{color:#d9e7ff}
-  .notify-btn{appearance:none;border:1px solid var(--stroke);background:rgba(255,255,255,.05);color:var(--muted);
-    border-radius:11px;padding:8px 12px;font:600 12px inherit;cursor:pointer;transition:.2s}
-  .notify-btn.on{color:var(--good);border-color:rgba(90,214,160,.45);background:rgba(90,214,160,.10)}
-  .tg-alert-types{display:none;gap:7px;flex-wrap:wrap;margin-top:11px}
-  body.telegram-mini-app .tg-alert-types{display:flex}
-  .tg-alert-types button{appearance:none;border:1px solid var(--stroke-soft);border-radius:10px;padding:8px 10px;
-    color:var(--muted);background:rgba(255,255,255,.04);font:650 11px inherit;cursor:pointer}
-  .tg-alert-types button.on{color:var(--good);border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.09)}
   .detail-box,.goal-box{margin-top:16px;border:1px solid var(--stroke-soft);background:rgba(2,6,23,.24);border-radius:16px;padding:18px}
   .detail-title{font-size:12px;font-weight:800;margin-bottom:10px;letter-spacing:.2px}
   .detail-scroll{overflow-x:auto}
@@ -262,9 +254,6 @@
   .health-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);box-shadow:0 0 10px currentColor}
   .data-health.good{color:var(--good)}.data-health.warn{color:#ffb27a}.data-health.bad{color:#ff8c8c}
 
-  .toast-container{position:fixed;right:20px;bottom:20px;z-index:20;display:flex;flex-direction:column;gap:10px;max-width:340px}
-  .toast{padding:13px 15px;border-radius:14px;background:rgba(18,22,36,.94);border:1px solid var(--stroke);box-shadow:var(--shadow);font-size:12px;line-height:1.45}
-  .toast b{display:block;color:var(--txt);margin-bottom:2px}.toast span{color:var(--muted)}
   .tg-nav{display:none}
 
   body.telegram-mini-app{
@@ -461,9 +450,7 @@
       </div>
       <div class="watch-tools">
         <div class="watchlist" id="watchlist"></div>
-        <button class="notify-btn" id="notifyBtn" type="button">🔕 Enable alerts</button>
       </div>
-      <div class="tg-alert-types" id="telegramAlertTypes"></div>
       <div id="trackedSummary" class="detail-box" style="display:none"></div>
       <div id="rewardSummary" class="reward-summary" style="display:none"></div>
       <div id="rewardDetail" class="detail-box" style="display:none"></div>
@@ -493,7 +480,6 @@
     <button type="button" data-tg-section="calculator"><span>🎯</span><b data-tg-label="calculator">Calculator</b></button>
     <button type="button" data-tg-section="users"><span>👥</span><b data-tg-label="users">Users</b></button>
   </nav>
-  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
@@ -518,7 +504,7 @@ const I18N = {
     campaignEnd:'Campaign end', chartTitle:'Volume by Token', chartDefaultHint:'Total volume across the top 100 traders',
     walletTitle:'Track Your Rank',
     walletHint:'Enter your <b>Titan username</b> to see rank, projected reward and net result. A wallet address also works. <b>PreStocks:</b> rewards apply only to <b>Epoch 4</b> ($1,666/token, top 50, pro rata, ~ $16.7M break-even volume, 0.01% cost). <b>Other campaigns:</b> campaigns, pools and epochs are discovered automatically; rewards use top-100 pro-rata estimates and a default 0.03% cost.',
-    walletPlaceholder:'Titan username or wallet address', track:'Track', clear:'Clear', enableAlerts:'🔕 Enable alerts', alertsOn:'🔔 Alerts on',
+    walletPlaceholder:'Titan username or wallet address', track:'Track', clear:'Clear',
     goalTitle:'Reward Target & Swap Calculator', targetRewardLabel:'Target total reward (USD)', swapAmountLabel:'Volume per swap (USD)',
     dataTitle:'Data source and freshness', refreshNow:'Refresh now', refreshAria:'Refresh data now', preparing:'Preparing…', loading:'Loading…',
     day:'d', hour:'h', minute:'m', second:'s', startsIn:'Starts in {time}', remaining:'{time} left', ended:'Ended', active:'Active',
@@ -529,12 +515,6 @@ const I18N = {
     sourceAutomatic:'Automatic', sourceFresh:'Fresh', sourceLive:'Live', sourceCurrent:'Current data',
     refreshCountdown:'{source} · {seconds}s', refreshingNow:'Refreshing now…', checkingData:'Checking data…', liveDataReady:'Live data ready',
     dataReadyChecking:'Data ready · checking live source', sourceDelayed:'Source delayed · showing current data', freshDataReady:'Fresh data ready',
-    notificationsOffTitle:'Alerts disabled', notificationsOffBody:'Campaign and epoch alerts have stopped.',
-    notificationsUnsupportedTitle:'Alerts unsupported', notificationsUnsupportedBody:'This browser does not support system notifications.',
-    notificationsDeniedTitle:'Notification permission denied', notificationsDeniedBody:'You can enable it later in browser settings.',
-    notificationsOnTitle:'Alerts enabled', notificationsOnBody:'New campaigns and epoch endings will be announced.',
-    newCampaignTitle:'New campaign started', newCampaignBody:'{label} is now active.', epochEndedTitle:'{symbol} Epoch {epoch} ended',
-    epochEndedBody:'The epoch ended at {date}.', campaignEndedTitle:'{label} ended', campaignEndedBody:'The campaign period has ended.',
     totalVolume:'Total Volume', campaignShare:'Campaign share', tradeCount:'Trades', tradersTop:'Traders (top {limit})', leader:'Leader', breakEven:'Break-even volume',
     yourRank:'Your rank', outsideTop:'Outside top {limit}', estimatedReward:'Estimated reward', cost:'Cost', net:'Net', reward:'Reward',
     estimatedNet:'Estimated Net Profit · Epoch {epoch}', rewardSummary:'{count} token(s) · top {top} · pool ${pool}/token · cost {cost}%',
@@ -562,7 +542,7 @@ const I18N = {
     campaignEnd:'Kampanya bitişi', chartTitle:'Token Bazında Hacim Dağılımı', chartDefaultHint:'İlk 100 işlemci bazında toplam hacim',
     walletTitle:'Sıralamanı Gör',
     walletHint:'<b>Titan kullanıcı adını</b> gir; sıralaman, <b>tahmini ödülün ve net sonucun</b> görünsün. Cüzdan adresi de çalışır. <b>PreStocks:</b> ödül yalnızca <b>Epoch 4</b> içinde geçerlidir ($1.666/token, ilk 50, pro rata, yaklaşık $16,7M başa baş hacmi, %0,01 maliyet). <b>Diğer kampanyalar:</b> kampanya, havuz ve epoch bilgileri otomatik bulunur; ödül ilk 100 için pro rata ve varsayılan %0,03 maliyetle hesaplanır.',
-    walletPlaceholder:'Titan kullanıcı adı veya cüzdan adresi', track:'Takip Et', clear:'Temizle', enableAlerts:'🔕 Bildirimleri Aç', alertsOn:'🔔 Bildirimler Açık',
+    walletPlaceholder:'Titan kullanıcı adı veya cüzdan adresi', track:'Takip Et', clear:'Temizle',
     goalTitle:'Hedef Ödül ve Swap Hesaplayıcı', targetRewardLabel:'Hedef toplam ödül (USD)', swapAmountLabel:'Her swap hacmi (USD)',
     dataTitle:'Veri kaynağı ve güncellik durumu', refreshNow:'Şimdi yenile', refreshAria:'Verileri şimdi yenile', preparing:'Hazırlanıyor…', loading:'Yükleniyor…',
     day:'g', hour:'sa', minute:'dk', second:'sn', startsIn:'{time} sonra', remaining:'{time} kaldı', ended:'Bitti', active:'Aktif',
@@ -573,12 +553,6 @@ const I18N = {
     sourceAutomatic:'Otomatik', sourceFresh:'Güncel', sourceLive:'Canlı', sourceCurrent:'Mevcut veri',
     refreshCountdown:'{source} · {seconds} sn', refreshingNow:'Şimdi yenileniyor…', checkingData:'Veri kontrol ediliyor…', liveDataReady:'Canlı veri hazır',
     dataReadyChecking:'Veri hazır · canlı kontrol sürüyor', sourceDelayed:'Kaynak gecikti · mevcut veri açık', freshDataReady:'Güncel veri hazır',
-    notificationsOffTitle:'Bildirimler kapatıldı', notificationsOffBody:'Kampanya ve epoch uyarıları durduruldu.',
-    notificationsUnsupportedTitle:'Bildirim desteklenmiyor', notificationsUnsupportedBody:'Bu tarayıcı sistem bildirimlerini desteklemiyor.',
-    notificationsDeniedTitle:'Bildirim izni verilmedi', notificationsDeniedBody:'İstersen tarayıcı ayarlarından daha sonra açabilirsin.',
-    notificationsOnTitle:'Bildirimler açıldı', notificationsOnBody:'Yeni kampanya ve epoch bitişleri bildirilecek.',
-    newCampaignTitle:'Yeni kampanya başladı', newCampaignBody:'{label} şu anda aktif.', epochEndedTitle:'{symbol} Epoch {epoch} bitti',
-    epochEndedBody:'Epoch {date} itibarıyla sona erdi.', campaignEndedTitle:'{label} bitti', campaignEndedBody:'Kampanya süresi sona erdi.',
     totalVolume:'Toplam Hacim', campaignShare:'Kampanya payı', tradeCount:'İşlem sayısı', tradersTop:'İşlemci (ilk {limit})', leader:'Lider', breakEven:'Başa baş hacmi',
     yourRank:'Sıralaman', outsideTop:'İlk {limit} dışında', estimatedReward:'Tahmini ödül', cost:'Maliyet', net:'Net', reward:'Ödül',
     estimatedNet:'Tahmini Net Kâr · Epoch {epoch}', rewardSummary:'{count} token · ilk {top} · havuz ${pool}/token · maliyet %{cost}',
@@ -674,9 +648,7 @@ trackedUsers = trackedUsers.map(value=>String(value).trim()).filter(Boolean).sli
 if(userQuery && !trackedUsers.some(value=>value.toLowerCase()===userQuery.toLowerCase())) trackedUsers.unshift(userQuery);
 let targetRewardValue = Number(localStorage.getItem('titanTargetReward')) || 100;
 let swapAmountValue = Number(localStorage.getItem('titanSwapAmount')) || 1000;
-let notificationPrefs = readStoredJSON('titanNotifications', {enabled:false, events:{}});
-if(!notificationPrefs || typeof notificationPrefs !== 'object') notificationPrefs = {enabled:false, events:{}};
-notificationPrefs.events = notificationPrefs.events || {};
+localStorage.removeItem('titanNotifications');
 let telegramSettings = null;
 
 async function telegramSettingsRequest(method='GET', patch){
@@ -703,11 +675,9 @@ async function loadTelegramSettings(){
       ? telegramSettings.follows.map(value=>String(value).trim()).filter(Boolean).slice(0,8)
       : trackedUsers;
     userQuery = trackedUsers[0] || userQuery;
-    notificationPrefs.enabled = telegramSettings.alerts !== false;
     localStorage.setItem('titanLanguage',currentLang);
     if(userQuery) localStorage.setItem('titanWallet',userQuery);
     localStorage.setItem('titanTrackedUsers',JSON.stringify(trackedUsers));
-    saveNotificationPrefs();
   }catch(e){
     // The dashboard stays fully usable if Telegram authorization has expired.
   }
@@ -749,7 +719,6 @@ function applyStaticLanguage(){
   document.querySelectorAll('[data-tg-label]').forEach(label=>{
     label.textContent = telegramLabels[label.dataset.tgLabel] || label.textContent;
   });
-  renderTelegramAlertTypes();
 }
 
 // --- Odul ayarlari ---
@@ -1094,7 +1063,6 @@ function acceptData(next, priority){
     buildCampaignTabs();
     buildEpochTabs();
     load(currentEpoch);
-    checkCampaignNotifications();
   }else{
     updateDataHealth();
   }
@@ -1164,126 +1132,6 @@ function refreshData({manual=false}={}){
   return refreshInFlight;
 }
 
-function showToast(title, body){
-  const container = document.getElementById('toastContainer');
-  if(!container) return;
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.innerHTML = `<b>${escapeHTML(title)}</b><span>${escapeHTML(body)}</span>`;
-  container.appendChild(toast);
-  setTimeout(()=>toast.remove(), 7000);
-}
-function saveNotificationPrefs(){
-  localStorage.setItem('titanNotifications', JSON.stringify(notificationPrefs));
-}
-function updateNotifyButton(){
-  const button = document.getElementById('notifyBtn');
-  if(!button) return;
-  const enabled = telegramMiniApp
-    ? notificationPrefs.enabled
-    : notificationPrefs.enabled && 'Notification' in window && Notification.permission === 'granted';
-  button.classList.toggle('on', enabled);
-  button.textContent = enabled ? t('alertsOn') : t('enableAlerts');
-}
-function renderTelegramAlertTypes(){
-  const container = document.getElementById('telegramAlertTypes');
-  if(!container || !telegramMiniApp) return;
-  const values = telegramSettings?.alertTypes || {campaigns:true,epochs:true,ranks:true};
-  const labels = currentLang === 'tr'
-    ? {campaigns:'Kampanya',epochs:'Epoch',ranks:'Sıralama'}
-    : {campaigns:'Campaigns',epochs:'Epochs',ranks:'Rank'};
-  container.innerHTML = Object.entries(labels).map(([key,label])=>
-    `<button type="button" class="${values[key]!==false?'on':''}" data-alert-type="${key}">` +
-      `${values[key]!==false?'✓ ':'○ '}${label}</button>`
-  ).join('');
-}
-function notifyUser(title, body, tag){
-  showToast(title, body);
-  if(notificationPrefs.enabled && 'Notification' in window && Notification.permission === 'granted'){
-    try{ new Notification(title, {body, tag}); }catch(e){}
-  }
-}
-function campaignSlugs(){
-  return Object.keys(DATA).filter(key=>DATA[key]?.all && !Array.isArray(DATA[key].tokens) && key!=='all');
-}
-function seedNotificationEvents(){
-  const now = Date.now();
-  campaignSlugs().forEach(slug=>{
-    const cfg = campaignConfig(slug);
-    const start = timestampMs(cfg.startTime);
-    const end = timestampMs(cfg.endTime);
-    if(start && now >= start) notificationPrefs.events[`start:${slug}:${start}`] = true;
-    (cfg.epochs || []).map(String).filter(key=>key!=='all').forEach(key=>{
-      const period = campaignPeriod(cfg,key);
-      if(period.end && now >= period.end) notificationPrefs.events[`epoch-end:${slug}:${key}:${period.end}`] = true;
-    });
-    if(end && now >= end) notificationPrefs.events[`campaign-end:${slug}:${end}`] = true;
-  });
-  saveNotificationPrefs();
-}
-function checkCampaignNotifications(){
-  if(!notificationPrefs.enabled) return;
-  const now = Date.now();
-  let changed = false;
-  campaignSlugs().forEach(slug=>{
-    const cfg = campaignConfig(slug);
-    const start = timestampMs(cfg.startTime);
-    const end = timestampMs(cfg.endTime);
-    const startKey = `start:${slug}:${start}`;
-    if(start && now >= start && !notificationPrefs.events[startKey]){
-      if(!end || now < end) notifyUser(t('newCampaignTitle'), t('newCampaignBody',{label:cfg.label}), startKey);
-      notificationPrefs.events[startKey] = true; changed = true;
-    }
-    (cfg.epochs || []).map(String).filter(key=>key!=='all').forEach(key=>{
-      const period = campaignPeriod(cfg,key);
-      const eventKey = `epoch-end:${slug}:${key}:${period.end}`;
-      if(period.end && now >= period.end && !notificationPrefs.events[eventKey]){
-        notifyUser(t('epochEndedTitle',{symbol:cfg.symbol,epoch:key}), t('epochEndedBody',{date:exactDateLabel(period.end)}), eventKey);
-        notificationPrefs.events[eventKey] = true; changed = true;
-      }
-    });
-    const endKey = `campaign-end:${slug}:${end}`;
-    if(end && now >= end && !notificationPrefs.events[endKey]){
-      notifyUser(t('campaignEndedTitle',{label:cfg.label}), t('campaignEndedBody'), endKey);
-      notificationPrefs.events[endKey] = true; changed = true;
-    }
-  });
-  if(changed) saveNotificationPrefs();
-}
-async function toggleNotifications(){
-  if(telegramMiniApp){
-    notificationPrefs.enabled = !notificationPrefs.enabled;
-    saveNotificationPrefs();
-    updateNotifyButton();
-    await syncTelegramSettings({alerts:notificationPrefs.enabled});
-    showToast(
-      notificationPrefs.enabled ? t('notificationsOnTitle') : t('notificationsOffTitle'),
-      notificationPrefs.enabled ? t('notificationsOnBody') : t('notificationsOffBody')
-    );
-    try{ telegramWebApp?.HapticFeedback?.notificationOccurred?.('success'); }catch(e){}
-    return;
-  }
-  if(notificationPrefs.enabled){
-    notificationPrefs.enabled = false;
-    saveNotificationPrefs(); updateNotifyButton();
-    showToast(t('notificationsOffTitle'), t('notificationsOffBody'));
-    return;
-  }
-  if(!('Notification' in window)){
-    showToast(t('notificationsUnsupportedTitle'), t('notificationsUnsupportedBody'));
-    return;
-  }
-  const permission = Notification.permission === 'granted' ? 'granted' : await Notification.requestPermission();
-  if(permission !== 'granted'){
-    showToast(t('notificationsDeniedTitle'), t('notificationsDeniedBody'));
-    return;
-  }
-  notificationPrefs.enabled = true;
-  seedNotificationEvents();
-  updateNotifyButton();
-  showToast(t('notificationsOnTitle'), t('notificationsOnBody'));
-}
-
 function openTelegramSection(requested=telegramParams.get('section') || 'overview'){
   if(!telegramMiniApp) return;
   let section = String(requested || 'overview');
@@ -1332,7 +1180,6 @@ async function init(){
   buildEpochTabs();
   persistTrackedUsers();
   renderWatchlist();
-  updateNotifyButton();
   load(currentEpoch);
   refreshData();
 
@@ -1340,7 +1187,6 @@ async function init(){
     updateCampaignClock();
     updateCampaignStatusTabs();
     updateDataHealth();
-    checkCampaignNotifications();
     if(document.visibilityState === 'visible' && Date.now() >= nextAutoRefreshAt) refreshData();
     else updateRefreshCountdown();
   }, 1000);
@@ -1822,19 +1668,6 @@ swapAmountInput.addEventListener('input', ()=>{
   localStorage.setItem('titanSwapAmount',swapAmountValue);
   if(currentCampaign!=='prestocks') renderGoalCalculator(DATA[currentCampaign]?.[currentEpoch]||DATA[currentCampaign]?.all,campaignConfig(currentCampaign));
 });
-document.getElementById('notifyBtn').addEventListener('click', toggleNotifications);
-document.getElementById('telegramAlertTypes').addEventListener('click', async event=>{
-  const button = event.target.closest('[data-alert-type]');
-  if(!button) return;
-  const key = button.dataset.alertType;
-  const current = telegramSettings?.alertTypes || {campaigns:true,epochs:true,ranks:true};
-  telegramSettings = Object.assign({},telegramSettings,{
-    alertTypes:Object.assign({},current,{[key]:current[key]===false}),
-  });
-  renderTelegramAlertTypes();
-  await syncTelegramSettings({alertTypes:telegramSettings.alertTypes});
-  try{ telegramWebApp?.HapticFeedback?.selectionChanged?.(); }catch(e){}
-});
 document.getElementById('langSwitch').addEventListener('click', e=>{
   const button = e.target.closest('[data-lang]');
   if(!button || button.dataset.lang === currentLang) return;
@@ -1842,7 +1675,6 @@ document.getElementById('langSwitch').addEventListener('click', e=>{
   localStorage.setItem('titanLanguage',currentLang);
   syncTelegramSettings({language:currentLang});
   applyStaticLanguage();
-  updateNotifyButton();
   buildCampaignTabs();
   buildEpochTabs();
   load(currentEpoch);
