@@ -1,0 +1,8 @@
+{
+  "name": "titan-stats",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}

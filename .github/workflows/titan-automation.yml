@@ -8,6 +8,10 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/titan-automation.yml"
+      - "lib/telegram.js"
+      - "api/telegram.js"
+      - "api/telegram-cron.js"
+      - "api/telegram-settings.js"
 
 permissions:
   contents: write
